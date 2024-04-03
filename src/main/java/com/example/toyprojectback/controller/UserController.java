@@ -1,6 +1,9 @@
 package com.example.toyprojectback.controller;
 
 
+import com.example.toyprojectback.dto.UserDto;
+import com.example.toyprojectback.dto.UserJoinRequest;
+import com.example.toyprojectback.dto.UserLoginRequest;
 import com.example.toyprojectback.entity.BoardCategory;
 import com.example.toyprojectback.entity.User;
 import com.example.toyprojectback.service.UserService;
@@ -26,7 +29,7 @@ import java.net.URLEncoder;
 public class UserController {
     private final UserService userService;
     private final BoardService boardService;
-    .findAllByNickName;
+
 
     @GetMapping("/join")
     public String joinPage(Model model) {
@@ -76,10 +79,11 @@ public class UserController {
 
     @PostMapping("/edit")
     public String userEdit(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult, Authentication auth, Model model) {
-        if (userService.editValid(dto, bindingResult, auth.getName()).hasErrors()) {
+        if (userService.editValid(userDto, bindingResult, auth.getName()).hasErrors()) {
             return "users/edit";
         }
-        userService.edit(dto, auth.getName());
+        userService.edit(userDto, auth.getName());
+
 
         model.addAttribute("message", "정보가 수정 되었습니다");
         model.addAttribute("nextUrl", "/users/myPage/board");
@@ -107,23 +111,24 @@ public class UserController {
         }
     }
 
-        @GetMapping("/admin")
-        public String adminPage(@RequestParam(required = false, defaultValue = "1") int page,
-        @RequestParam(required = false, defaultValue = "") String keyword,
-        Model model) {
+    @GetMapping("/admin")
+    public String adminPage(@RequestParam(required = false, defaultValue = "1") int page,
+                            @RequestParam(required = false, defaultValue = "") String keyword,
+                            Model model) {
 
-            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
-            Page<User> users = userService.findAllByNickname(keyword, pageRequest);
+        PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        Page<User> users = userService.findAllByNickname(keyword, pageRequest);
 
-            model.addAttribute("users", users);
-            model.addAttribute("keyword", keyword);
-            return "users/admin";
-        }
+        model.addAttribute("users", users);
+        model.addAttribute("keyword", keyword);
+        return "users/admin";
+    }
 
-        @GetMapping("/admin/{userId}")
-        public String adminChangRole(@PathVariable Long userId,@RequestParam(required= false, defaultValue = "1") int page, @RequestParam(required = false, defaultValue = "") String keyword) throws UnsupportedEncodingException {
-            userService.changeRole(userId);
-            return "redirect:/users/admin?page=" + page + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
-        }
+    @GetMapping("/admin/{userId}")
+    public String adminChangRole(@PathVariable Long userId, @RequestParam(required = false, defaultValue = "1") int page, @RequestParam(required = false, defaultValue = "") String keyword) throws UnsupportedEncodingException {
+        userService.changeRole(userId);
+        return "redirect:/users/admin?page=" + page + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+    }
+}
 
 

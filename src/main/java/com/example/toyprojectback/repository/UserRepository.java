@@ -1,4 +1,4 @@
-package com.example.toyprojectback.Repository;
+package com.example.toyprojectback.repository;
 
 import com.example.toyprojectback.entity.User;
 import com.example.toyprojectback.entity.UserRole;
@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByLoginId(String nickname);
     Long countAllByUserRole(UserRole userRole);
 
+    boolean existsByNickname(String nickname);
 }
 
 // Page : 페이징된 데이터, 페이징 정보를 담는 객체

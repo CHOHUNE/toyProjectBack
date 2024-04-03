@@ -1,6 +1,7 @@
 package com.example.toyprojectback.entity;
 
 
+import com.example.toyprojectback.dto.BoardDto;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -2,13 +2,16 @@ package com.example.toyprojectback.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,5 @@ public class User {
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Comment> comments;
-
 
 }
