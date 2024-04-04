@@ -6,8 +6,13 @@ import com.example.toyprojectback.dto.UserJoinRequest;
 import com.example.toyprojectback.dto.UserLoginRequest;
 import com.example.toyprojectback.entity.BoardCategory;
 import com.example.toyprojectback.entity.User;
+import com.example.toyprojectback.service.BoardService;
 import com.example.toyprojectback.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+@Tag(name = "User", description = "유저 관련 API")
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -31,12 +37,16 @@ public class UserController {
     private final BoardService boardService;
 
 
+    @Operation(summary = "회원가입 페이지", description = "회원가입 페이지로 이동")
+    @Parameter(name = "model", description = "회원가입 페이지로 이동")
     @GetMapping("/join")
     public String joinPage(Model model) {
         model.addAttribute("userJoinRequest", new UserJoinRequest());
         return "users/join";
     }
 
+    @Operation(summary = "회원가입", description = "회원가입을 진행한다.")
+    @Parameter(name = "req", description = "회원가입 정보")
     @PostMapping("/join")
     public String join(@Valid @ModelAttribute UserJoinRequest req, BindingResult bindingResult, Model model) {
         if (userService.joinValid(req, bindingResult).hasErrors()) { // 에러가 있으면 다시 회원가입 페이지로 이동 시킨다.
