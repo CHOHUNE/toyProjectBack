@@ -5,7 +5,6 @@ import com.example.toyprojectback.dto.BoardDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @Entity
@@ -18,6 +17,8 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String title;
     private String body;
 
     @Enumerated(EnumType.STRING)
@@ -33,8 +34,9 @@ public class Board extends BaseEntity {
     private List<Like> likes;
     private Integer likeCnt;
 
-    @OneToMany(mappedBy="board",orphanRemoval = true)
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments;
+
     private Integer commentCnt;
 
     @OneToOne(fetch = FetchType.LAZY)
