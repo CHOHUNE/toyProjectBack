@@ -12,6 +12,8 @@ import com.example.toyprojectback.repository.CommentRepository;
 import com.example.toyprojectback.repository.LikeRepository;
 import com.example.toyprojectback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -132,7 +134,7 @@ public class UserService {
     @Transactional
     public void changeRole(Long userId) {
         User user = userRepository.findById(userId).get();
-        user.changeRole();
+        user.changRole();
 
     }
 
