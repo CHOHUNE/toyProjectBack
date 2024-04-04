@@ -20,13 +20,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findAllByCategoryAndTitleContainsAndUserUserRoleNot(BoardCategory category, String title, UserRole userRole, PageRequest pageRequest);
     //Board category, title 필드 및 user.userRole 필드 조회
     // title 이 주어진 text를 포함하는지 체크 (Contains)
-    // userRole 불일치 조회
     // PageRequest 를 이용하여 페이징 처리
 
     Page<Board> findAllByCategoryAndUserNicknameContainsAndUserUserRoleNot(BoardCategory category, String nickname, UserRole userRole, PageRequest pageRequest);
     //Board category, user.nickname 필드 및 user.userRole 필드 조회
     // user.nickname 이 주어진 text를 포함하는지 체크 (Contains)
-    // userRole 불일치 조회
     // PageRequest 를 이용하여 페이징 처리
 
     List<Board> findAllByUserLoginId(String loginId);
@@ -34,7 +32,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 
     List<Board> findAllByCategoryAndUserUserRole(BoardCategory category, UserRole userRole);
-    //해당 카테고리에 있는 게시글을 조회, 이때 ADMIN이 작성한 글(공지)는 포함
+    //Category, User.userRole 필드로 Board 엔티티 리스트로 조회
 
     Long countAllByUserUserRole(UserRole userRole);
     // 전체 공지글이 몇개 있는지 조회 시 사용

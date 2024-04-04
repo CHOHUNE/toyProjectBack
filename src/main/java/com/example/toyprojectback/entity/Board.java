@@ -36,7 +36,6 @@ public class Board extends BaseEntity {
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments;
-
     private Integer commentCnt;
 
     @OneToOne(fetch = FetchType.LAZY)

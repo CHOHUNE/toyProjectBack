@@ -52,6 +52,16 @@ public class User {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
+    //userRole 파라미터로 전달 받은 새로운 권한을 현재 사용자 엔티티에 저장
+    // 기존 Authentication 객체를 가져옴
+    // 새로운 권한 정보 (SimpleGrantedAuthortiy)를 추가한 ArrayList를 생성
+    // 기존 Authentication 객체를 이용해 UsernamePasswordAuthenticationToken 객체를 생성
+    // 여기에 새로운 권한 목록을 넘김
+    // SecurityContextHolder에 새로운 Authentication 객체를 업데이트
+    // 덧붙여 Authentication 객체에는 principal, credentials, authorities 가 있다.
+    // principal : UserDetailsService에서 조회한 UserDetails
+
+
     public void likeChange(Integer receivedLikeCnt) {
         this.receivedLikeCnt = receivedLikeCnt;
         if (this.receivedLikeCnt >= 10 && this.userRole.equals(UserRole.SILVER)) {
