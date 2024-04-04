@@ -1,5 +1,6 @@
 package com.example.toyprojectback.service;
 
+import com.example.toyprojectback.dto.BoardCntDto;
 import com.example.toyprojectback.dto.BoardCreateRequest;
 import com.example.toyprojectback.dto.BoardDto;
 import com.example.toyprojectback.entity.*;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +55,7 @@ public class BoardService {
         //Optional로 반환하는 의도
         // null 체크 간소화, nullPointerException 방지, 의도 표현 값이 없을 수 있다.
 
-        if(optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+        if (optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
             return null;
             // 보드가 빈 값이거나, 카테고리가 대소문자 관계 없이 맞지 않으면 null 반환
         }
@@ -67,11 +70,11 @@ public class BoardService {
 
         Board saveBoard = boardRepository.save(req.toEntity(category, loginUser));
 
-        UploadImage uploadImage= uploadImageService.saveImage(req.getUploadImage(), saveBoard);
-        if(uploadImage != null) {
+        UploadImage uploadImage = uploadImageService.saveImage(req.getUploadImage(), saveBoard);
+        if (uploadImage != null) {
             saveBoard.setUploadImage(uploadImage);
         }
-        if(category.equals(BoardCategory.GREETING)) {
+        if (category.equals(BoardCategory.GREETING)) {
             loginUser.rankUp(UserRole.SILVER, auth);
         }
         return saveBoard.getId();
@@ -79,15 +82,15 @@ public class BoardService {
     }
 
     @Transactional
-    public Long editBoard(Long boardId, String cartegory, BoardDto dto)throws IOException {
+    public Long editBoard(Long boardId, String cartegory, BoardDto dto) throws IOException {
 
         Optional<Board> optBoard = boardRepository.findById(boardId);
 
         // id 에 해당하는 게시글이 없거나 카테고리가 일치 하지 않으면 null return
 
-         if(optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+        if (optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
             return null;
-    }
+        }
 
         Board board = optBoard.get();
 
@@ -104,8 +107,65 @@ public class BoardService {
         board.update(dto);
 
         return board.getId();
+    }
+
+    public Long deleteBoard(Long boardId, String category) throws IOException {
+
+        Optional<Board> optBoard = boardRepository.findById(boardId);
+
+        if (optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+            return null; //.get()메서드는 Optional 로 감싸져 있는 객체를 가져오는 메서드이다.
         }
+        User boardUser = optBoard.get().getUser();
+        return boardId;
 
+    }
 
+    public String getCategory(Long boardId) {
+        Board board = boardRepository.findById(boardId).get();
+        return board.getCategory().toString().toLowerCase();
+    }
+
+    public List<Board> findMyBoard(String category, String loginId) {
+
+        if (category.equals("board")) {
+            return boardRepository.findAllByUserLoginId(loginId);
+
+        } else if (category.equals("like")) {
+            List<Like> likes = likeRepository.findAllByUserLoginId(loginId);
+            List<Board> boards = new ArrayList<>();
+            for (Like like : likes) {
+                boards.add(like.getBoard());
+            }
+
+            return boards;
+        } else if (category.equals("comment")) {
+            List<Comment> comments = commentRepository.findAllByUserLoginId(loginId);
+            List<Board> boards = new ArrayList<>();
+            HashSet<Long> commentIds = new HashSet<>();
+
+            for (Comment comment : comments) {
+
+                if (!commentIds.contains(comment.getBoard().getId())) {
+                    boards.add(comment.getBoard());
+                    commentIds.add(comment.getBoard().getId());
+                }
+            }
+
+            return boards;
+        }
+        return null;
+    }
+
+    public BoardCntDto getBoardCnt() {
+        return BoardCntDto.builder()
+                .totalBoardCnt(boardRepository.count())
+                .totalNoticeCnt(boardRepository.countAllByUserUserRole(UserRole.ADMIN))
+                .totalGreetingCnt(boardRepository.countAllByCategoryAndUserUserRoleNot(BoardCategory.GREETING, UserRole.ADMIN))
+                .totalFreeCnt(boardRepository.countAllByCategoryAndUserUserRoleNot(BoardCategory.FREE, UserRole.ADMIN))
+                .totalGoldCnt(boardRepository.countAllByCategoryAndUserUserRoleNot(BoardCategory.GOLD, UserRole.ADMIN))
+                .build();
+    }
 }
+
 
