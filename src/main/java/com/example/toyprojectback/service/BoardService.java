@@ -74,7 +74,37 @@ public class BoardService {
         if(category.equals(BoardCategory.GREETING)) {
             loginUser.rankUp(UserRole.SILVER, auth);
         }
+        return saveBoard.getId();
+
     }
+
+    @Transactional
+    public Long editBoard(Long boardId, String cartegory, BoardDto dto)throws IOException {
+
+        Optional<Board> optBoard = boardRepository.findById(boardId);
+
+        // id 에 해당하는 게시글이 없거나 카테고리가 일치 하지 않으면 null return
+
+         if(optBoard.isEmpty() || !optBoard.get().getCategory().toString().equalsIgnoreCase(category)) {
+            return null;
+    }
+
+        Board board = optBoard.get();
+
+        if (board.getUploadImage() != null) {
+            uploadImageService.deleteImage(board.getUploadImage());
+            board.setUploadImage(null);
+
+        }
+
+        UploadImage uploadImage = uploadImageService.saveImage(dto.getNewImage(), board);
+        if (uploadImage != null) {
+            board.setUploadImage(uploadImage);
+        }
+        board.update(dto);
+
+        return board.getId();
+        }
 
 
 }

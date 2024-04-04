@@ -11,7 +11,9 @@ import java.util.List;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long>{
 
-    void deleteByUser(User loginUser);
+    void deleteByUserLoginIdAndBoardId(String loginId, Long boardId);
+
+    Boolean existsByUserLoginIdAndBoardId(String loginId, Long boardId);
 
     List<Like> findAllByUserLoginId(String loginId);
 }

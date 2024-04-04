@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long>{
-    public List<Comment> findAllByUserLoginId(String loginId);
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-        void deleteByUser(User loginUser);
+    List<Comment> findAllByBoardId(Long boardId);
+    List<Comment> findAllByUserLoginId(String loginId);
+
 }
