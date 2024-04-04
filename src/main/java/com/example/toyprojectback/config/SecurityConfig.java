@@ -2,6 +2,8 @@ package com.example.toyprojectback.config;
 
 import com.example.toyprojectback.repository.UserRepository;
 import com.example.toyprojectback.security.MyAccessDeniedHandler;
+import com.example.toyprojectback.security.MyLoginSuccessHandler;
+import com.example.toyprojectback.security.MyLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-public class SpringSecurity {
+public class SecurityConfig {
 
     private final UserRepository userRepository;
 

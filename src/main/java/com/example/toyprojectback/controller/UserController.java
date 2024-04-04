@@ -38,14 +38,14 @@ public class UserController {
 
 
     @Operation(summary = "회원가입 페이지", description = "회원가입 페이지로 이동")
-    @Parameter(name = "model", description = "회원가입 페이지로 이동")
+    @Parameter(name = "model")
     @GetMapping("/join")
     public String joinPage(Model model) {
         model.addAttribute("userJoinRequest", new UserJoinRequest());
         return "users/join";
     }
 
-    @Operation(summary = "회원가입", description = "회원가입을 진행한다.")
+    @Operation(summary = "회원가입", description = "회원가입을 진행")
     @Parameter(name = "req", description = "회원가입 정보")
     @PostMapping("/join")
     public String join(@Valid @ModelAttribute UserJoinRequest req, BindingResult bindingResult, Model model) {
