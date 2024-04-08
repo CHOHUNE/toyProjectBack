@@ -19,7 +19,7 @@ public class BoardCreateRequest {
     private MultipartFile uploadImage;
 
 
-    @Schema(description = " Board Entity로 변환")
+
     public Board toEntity(BoardCategory category, User user) {
         return Board.builder()
                 .user(user)

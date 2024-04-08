@@ -2,12 +2,14 @@ package com.example.toyprojectback.dto;
 
 import com.example.toyprojectback.entity.User;
 import com.example.toyprojectback.entity.UserRole;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
 import java.time.LocalDateTime;
 
 @Data
+@Schema(description = "회원가입 시 사용하는 DTO")
 public class UserJoinRequest {
     private String loginId;
     private String password;

@@ -27,7 +27,7 @@ public class BoardDto {
     private UploadImage uploadImage;
 
 
-    @Schema(description = " boardDto -> boardEntity")
+
     public static BoardDto of(Board board) {
         return BoardDto.builder()
                 .id(board.getId())
