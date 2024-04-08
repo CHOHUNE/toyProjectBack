@@ -82,7 +82,7 @@ public class BoardService {
     }
 
     @Transactional
-    public Long editBoard(Long boardId, String cartegory, BoardDto dto) throws IOException {
+    public Long editBoard(Long boardId, String category, BoardDto dto) throws IOException {
 
         Optional<Board> optBoard = boardRepository.findById(boardId);
 

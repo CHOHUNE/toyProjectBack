@@ -1,17 +1,16 @@
-package com.example.toyprojectback.security;
+package com.example.toyprojectback.service;
 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.stereotype.Controller;
 
 @Configuration
 @EnableWebSecurity
-public class BCryptPasswordEncoder {
+public class EncrypterConfig {
 
     @Bean
-    public BCryptPasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
+    public EncrypterConfig encoder(){
+        return new EncrypterConfig();
     }
 }

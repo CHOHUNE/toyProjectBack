@@ -7,6 +7,8 @@ import com.example.toyprojectback.dto.BoardSearchRequest;
 import com.example.toyprojectback.dto.CommentCreateRequest;
 import com.example.toyprojectback.entity.BoardCategory;
 import com.example.toyprojectback.service.BoardService;
+import com.example.toyprojectback.service.CommentService;
+import com.example.toyprojectback.service.LikeService;
 import com.example.toyprojectback.service.UploadImageService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -125,32 +127,6 @@ public class BoardController {
         return "boards/detail";
     }
 
-    @GetMapping("/{category}/{boardId}")
-    public String boardDetailPage(@PathVariable String category, @PathVariable Long boardId, Model model, Authentication auth) {
-
-        if (auth != null) {
-            model.addAttribute("loginUserLoginId", auth.getName());
-            model.addAttribute("likeCheck", likeService.checkLike(auth.getName(), boardId));
-
-        }
-        BoardDto boardDto = boardService.getBoard(boardId, category);
-        //id에 해당하는 게시글이 없거나 카테고리가 일치하지 않는 경우
-
-        if (boardDto == null) {
-            model.addAttribute("message", "해당 게시글이 존재하지 않습니다");
-            model.addAttribute("nextUrl", "/boards/" + category);
-
-            return "printMessage";
-        }
-        model.addAttribute("boardDto", boardDto);
-        model.addAttribute("category", category);
-
-        model.addAttribute("commentCreateRequest", new CommentCreateRequest());
-        model.addAttribute("commentList", commentServie.findAll(boardId));
-
-        return "boards/detail";
-
-    }
 
     @PostMapping("/{category}/{boardId}/edit")
     public String boardEdit(@PathVariable String category, @PathVariable Long boardId, @ModelAttribute BoardDto dto, Model model) throws IOException {
@@ -169,7 +145,7 @@ public class BoardController {
     }
 
     @GetMapping("/{category}/{boardId}/delete")
-    public String boardDelete(@PathVariable String category, @PathVariable Long boardId, Model model) {
+    public String boardDelete(@PathVariable String category, @PathVariable Long boardId, Model model)throws IOException {
         if (category.equals("greeting")) {
             model.addAttribute("message", "가입인사는 삭제할 수 없습니다");
             model.addAttribute("nextUrl", "/boards/greeting");

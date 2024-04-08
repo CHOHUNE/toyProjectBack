@@ -17,7 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // nickname으로 검색 조건을 지정하여 페이징 처리된 User 엔티티 결과를 반환
     Boolean existsByLoginId(String nickname);
     Long countAllByUserRole(UserRole userRole);
-
     boolean existsByNickname(String nickname);
 }
 

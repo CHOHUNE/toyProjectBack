@@ -4,7 +4,6 @@ package com.example.toyprojectback.controller;
 import com.example.toyprojectback.dto.UserDto;
 import com.example.toyprojectback.dto.UserJoinRequest;
 import com.example.toyprojectback.dto.UserLoginRequest;
-import com.example.toyprojectback.entity.BoardCategory;
 import com.example.toyprojectback.entity.User;
 import com.example.toyprojectback.service.BoardService;
 import com.example.toyprojectback.service.UserService;
@@ -13,8 +12,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -109,7 +106,7 @@ public class UserController {
 
     @PostMapping("/delete")
     public String userDelete(@ModelAttribute UserDto dto, Authentication auth, Model model) {
-        Boolean deleteSucess = userService.delete(auth.getName(), auth.getNowPassword());
+        Boolean deleteSucess = userService.delete(auth.getName(), dto.getNowPassword());
         if (deleteSucess) {
             model.addAttribute("message", "탈퇴 되었습니다");
             model.addAttribute("nextUrl", "/users/logout");
